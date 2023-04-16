@@ -27,6 +27,15 @@ export const addTransaction = (transaction: Transaction) => {
     }));
 };
 
+export const updateTransaction = (updatedTransaction: Transaction) => {
+    useTransactionStore.setState((state) => ({
+        ...state,
+        transactions: state.transactions.map((transaction) =>
+            transaction.id === updatedTransaction.id ? updatedTransaction : transaction,
+        ),
+    }));
+};
+
 export const removeTransaction = (id: string) => {
     useTransactionStore.setState((state) => ({
         ...state,

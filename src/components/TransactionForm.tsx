@@ -1,34 +1,27 @@
+import dayjs from "dayjs";
 import { useForm } from "react-hook-form";
 import { v4 } from "uuid";
-import { Transaction } from "../types/Transaction";
-import dayjs from "dayjs";
+import { IntervalCopy, Transaction } from "../types/Transaction";
+import { addTransaction, updateTransaction } from "../stores/transactionStore";
 
 interface TransactionFormProps {
-    onSubmit: (value: Transaction) => void;
-    onCancel?: () => void;
+    onSubmit: () => void;
+    defaultValues?: Transaction;
 }
 
-console.log({
-    date: new Date(),
-    dayjs: dayjs().toDate(),
-});
-
-const repeats = {
-    "1:day": "Daily",
-    "1:week": "Weekly",
-    "2:weeks": "Bi-Weekly",
-    "1:month": "Monthly",
-};
-
-export const TransactionForm = ({ onSubmit, onCancel }: TransactionFormProps) => {
+export const TransactionForm = ({ onSubmit, defaultValues }: TransactionFormProps) => {
     const { register, handleSubmit, reset } = useForm<Transaction>({
-        defaultValues: {
-            startDate: dayjs().format("YYYY-MM-DD"),
-        },
+        defaultValues: defaultValues ?? { id: v4(), dueDate: dayjs().format("YYYY-MM-DD") },
     });
 
     const handleFormSubmit = (transaction: Transaction) => {
-        onSubmit({ ...transaction, id: v4(), interval: transaction.interval || null });
+        if (defaultValues) {
+            updateTransaction(transaction);
+        } else {
+            addTransaction(transaction);
+        }
+
+        onSubmit();
         reset();
     };
 
@@ -46,13 +39,11 @@ export const TransactionForm = ({ onSubmit, onCancel }: TransactionFormProps) =>
                 placeholder="Due Date"
                 className="block input input-bordered w-full"
                 type="date"
-                {...register("startDate", { required: true, valueAsDate: true })}
+                {...register("dueDate", { required: true })}
             />
 
             <select className="block input input-bordered w-full" {...register("interval")}>
-                <option value="">No repeat</option>
-
-                {Object.entries(repeats).map(([interval, label]) => (
+                {Object.entries(IntervalCopy).map(([interval, label]) => (
                     <option key={interval} value={interval}>
                         {label}
                     </option>
@@ -73,7 +64,7 @@ export const TransactionForm = ({ onSubmit, onCancel }: TransactionFormProps) =>
                     Save
                 </button>
 
-                <button className="block btn btn-ghost w-full" type="button" onClick={onCancel}>
+                <button className="block btn btn-ghost w-full" type="button" onClick={() => onSubmit()}>
                     Cancel
                 </button>
             </div>

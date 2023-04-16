@@ -2,12 +2,12 @@ import { noop } from "lodash";
 import { ReactNode } from "react";
 import { createPortal } from "react-dom";
 
-interface ModalButtonProps {
+interface ModalProps {
     open: boolean;
     children: ReactNode;
 }
 
-export const ModalButton = ({ open, children }: ModalButtonProps) => {
+export const Modal = ({ open, children }: ModalProps) => {
     return createPortal(
         <>
             <input type="checkbox" className="modal-toggle" checked={open} onChange={noop} />
