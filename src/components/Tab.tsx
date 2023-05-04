@@ -1,4 +1,4 @@
-import { clsx } from "@mantine/core";
+import clsx from "clsx";
 import { ComponentProps } from "react";
 
 interface TabProps extends Omit<ComponentProps<"button">, "onChange"> {

@@ -10,11 +10,8 @@
         "format": "prettier --write ."
     },
     "dependencies": {
-        "@emotion/react": "^11.10.6",
-        "@mantine/core": "^6.0.6",
-        "@mantine/dates": "^6.0.7",
-        "@mantine/hooks": "^6.0.6",
-        "daisyui": "^2.51.5",
+        "clsx": "^1.2.1",
+        "daisyui": "^2.51.6",
         "dayjs": "^1.11.7",
         "lodash": "^4.17.21",
         "react": "^18.2.0",
@@ -27,15 +24,15 @@
     "devDependencies": {
         "@tailwindcss/forms": "^0.5.3",
         "@types/lodash": "^4.14.194",
-        "@types/react": "^18.0.35",
-        "@types/react-dom": "^18.0.11",
+        "@types/react": "^18.2.2",
+        "@types/react-dom": "^18.2.3",
         "@types/uuid": "^9.0.1",
         "@vitejs/plugin-react-swc": "^3.3.0",
         "autoprefixer": "^10.4.14",
-        "postcss": "^8.4.22",
-        "prettier": "^2.8.7",
-        "tailwindcss": "^3.3.1",
+        "postcss": "^8.4.23",
+        "prettier": "^2.8.8",
+        "tailwindcss": "^3.3.2",
         "typescript": "^5.0.4",
-        "vite": "^4.2.1"
+        "vite": "^4.3.4"
     }
 }
