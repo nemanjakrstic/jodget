@@ -3,31 +3,25 @@ import { Transaction } from "../types/Transaction";
 import { Duration } from "dayjs/plugin/duration";
 import { Balance } from "../types/Balance";
 
-export const buildData = (transactions: Transaction[], balance: number) => {
-    const data: Balance[] = [];
-    let currentBalance = balance;
-    let currentDate = dayjs();
-    const endDate = dayjs().add(3, "months").endOf("month");
-
-    while (currentDate.isBefore(endDate)) {
+export const getBalances = (transactions: Transaction[], currentBalance: number) => {
+    return getDates().reduce<Balance[]>((balances, date) => {
         for (const transaction of transactions) {
-            if (currentDate.isSame(transaction.dueDate, "date")) {
+            if (date.isSame(transaction.dueDate, "date")) {
                 currentBalance += transaction.amount;
             } else if (transaction.interval) {
                 const duration = parseDuration(transaction.interval);
-                const nextDate = getNextDate(dayjs(transaction.dueDate), currentDate, duration);
+                const nextDate = getNextDate(dayjs(transaction.dueDate), date, duration);
 
-                if (currentDate.isSame(nextDate, "date")) {
+                if (date.isSame(nextDate, "date")) {
                     currentBalance += transaction.amount;
                 }
             }
         }
 
-        data.push({ date: currentDate.startOf("day").toDate(), balance: currentBalance });
-        currentDate = currentDate.add(1, "day");
-    }
+        balances.push({ balance: currentBalance, date: date.toDate() });
 
-    return data;
+        return balances;
+    }, []);
 };
 
 const parseDuration = (input: string) => {
@@ -43,4 +37,16 @@ const getNextDate = (date: Dayjs, now: Dayjs, duration: Duration) => {
     }
 
     return currentDate;
+};
+
+export const getDates = (endDate = dayjs().add(3, "months").endOf("month")) => {
+    let currentDate = dayjs();
+    const dates: Dayjs[] = [];
+
+    while (currentDate.isBefore(endDate)) {
+        dates.push(currentDate.startOf("day"));
+        currentDate = currentDate.add(1, "day");
+    }
+
+    return dates;
 };

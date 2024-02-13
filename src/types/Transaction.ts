@@ -2,6 +2,8 @@ export interface Transaction {
     id: string;
     description: string;
     dueDate: string;
+    startDate?: string;
+    endDate?: string;
     interval: keyof typeof IntervalCopy;
     amount: number;
 }

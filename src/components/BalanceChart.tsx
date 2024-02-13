@@ -2,7 +2,7 @@ import { AxisOptions, Chart } from "react-charts";
 import { useTransactionStore } from "../stores/transactionStore";
 import { Transaction } from "../types/Transaction";
 import { useMemo } from "react";
-import { buildData } from "../models/Transaction";
+import { getBalances } from "../models/Transaction";
 import { Balance } from "../types/Balance";
 
 export const BalanceChart = () => {
@@ -19,7 +19,7 @@ export const BalanceChart = () => {
 
 const useChartOptions = (transactions: Transaction[], balance: number) => {
     const data = useMemo(() => {
-        const data = buildData(transactions, balance);
+        const data = getBalances(transactions, balance);
         const zero = data.map((datum) => ({ date: datum.date, balance: 0 }));
 
         return [
