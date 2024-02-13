@@ -1,5 +1,7 @@
+import { uniqBy } from "lodash";
+import { v4 } from "uuid";
 import { create } from "zustand";
-import { persist, createJSONStorage } from "zustand/middleware";
+import { createJSONStorage, persist } from "zustand/middleware";
 import { Transaction } from "../types/Transaction";
 
 interface TransactionStore {
@@ -46,3 +48,19 @@ export const removeTransaction = (id: string) => {
 export const setBalance = (balance: number) => {
     useTransactionStore.setState({ balance });
 };
+
+(() => {
+    // Fix same IDs in local storage
+    const { transactions } = useTransactionStore.getState();
+    const uniqueTransactionIdCount = uniqBy(transactions, (transaction) => transaction.id).length;
+
+    if (uniqueTransactionIdCount !== transactions.length) {
+        console.log("Fixing transaction IDs...");
+
+        useTransactionStore.setState({
+            transactions: transactions.map((transaction) => ({ ...transaction, id: v4() })),
+        });
+
+        console.log("Done.");
+    }
+})();

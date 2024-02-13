@@ -13,7 +13,7 @@ export const App = () => {
     return (
         <div>
             <Modal open={showModal}>
-                <TransactionForm onSubmit={() => setShowModal(false)} />
+                {showModal ? <TransactionForm onSubmit={() => setShowModal(false)} /> : null}
             </Modal>
 
             <div className="bg-white">
