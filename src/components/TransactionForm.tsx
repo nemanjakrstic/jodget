@@ -42,6 +42,20 @@ export const TransactionForm = ({ onSubmit, defaultValues }: TransactionFormProp
                 {...register("dueDate", { required: true })}
             />
 
+            <input
+                placeholder="Start Date"
+                className="block input input-bordered w-full"
+                type="date"
+                {...register("startDate")}
+            />
+
+            <input
+                placeholder="End Date"
+                className="block input input-bordered w-full"
+                type="date"
+                {...register("endDate")}
+            />
+
             <select className="block input input-bordered w-full" {...register("interval")}>
                 {Object.entries(IntervalCopy).map(([interval, label]) => (
                     <option key={interval} value={interval}>

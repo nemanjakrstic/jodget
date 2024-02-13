@@ -6,6 +6,13 @@ import { Balance } from "../types/Balance";
 export const getBalances = (transactions: Transaction[], currentBalance: number) => {
     return getDates().reduce<Balance[]>((balances, date) => {
         for (const transaction of transactions) {
+            const startDate = dayjs(transaction.startDate);
+            const endDate = dayjs(transaction.endDate);
+
+            if (!isBetween(date, startDate, endDate)) {
+                continue;
+            }
+
             if (date.isSame(transaction.dueDate, "date")) {
                 currentBalance += transaction.amount;
             } else if (transaction.interval) {
@@ -49,4 +56,12 @@ export const getDates = (endDate = dayjs().add(3, "months").endOf("month")) => {
     }
 
     return dates;
+};
+
+const isBetween = (date: Dayjs, start: Dayjs, end: Dayjs) => {
+    if (date.isSame(start, "date") || date.isSame(date, "date")) {
+        return true;
+    }
+
+    return start.isAfter(date, "date") || end.isBefore(date, "date");
 };
